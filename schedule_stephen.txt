@@ -1,3 +1,3 @@
 Schedule and deliverable:
 	- Feature/Item to complete -- Day MM/DD by TIMEpm (estimate: x hrs)
-	- 
+	- Figure out how to implement git vc with android studio -- 02/21 by 0700 
