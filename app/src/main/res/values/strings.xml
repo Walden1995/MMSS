@@ -3,10 +3,12 @@
 
     <string name="mmss_notification_title_template">Mmss: %1$s</string>
 
-    <!-- TODO: remove this placeholder text -->
     <string name="mmss_notification_placeholder_text_template">default test notification</string>
 
     <string name="helloPhoneString">This is a hello string. This has been edited.</string>
+
+    <string name="pageText">This is the second page!</string>
+
     <string name="nextPageButton">Next Page</string>
     <string name="action_share">Share</string>
     <string name="action_reply">Reply</string>
