@@ -1,0 +1,7 @@
+Schedule
+
+- Feature/Item to complete -- Day MM/DD (estimate: x hrs)
+- Figure out github integration into android studio 2/22 (2hrs)
+- Finalize hardware list for purchasing 2/23 (8 hrs)
+- Start crafting API format from pi to the server (8 hrs)
+-
