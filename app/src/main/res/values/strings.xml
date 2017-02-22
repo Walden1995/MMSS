@@ -7,7 +7,7 @@
     <string name="mmss_notification_placeholder_text_template">default test notification</string>
 
     <string name="helloPhoneString">This is a hello string</string>
-
+    <string name="nextPageButton">Next Page</string>
     <string name="action_share">Share</string>
     <string name="action_reply">Reply</string>
 </resources>
