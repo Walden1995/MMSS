@@ -9,7 +9,9 @@
 
     <string name="pageText">This is the second page!</string>
 
+
     <string name="nextPageButton">Next Page</string>
     <string name="action_share">Share</string>
     <string name="action_reply">Reply</string>
+    <string name="descr_overflow_button">newUndefinedString</string>
 </resources>
