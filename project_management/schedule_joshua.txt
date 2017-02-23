@@ -3,4 +3,5 @@ Schedule and deliverable:
 	- Upload Objectives and Key Requirements for the first week -- Thursday 2/23 by 11pm (estimate: 1 hr)
 	- Figure out how to integrate git into Android Studio -- Thursday 2/23 by 11pm (estimate: 2 hrs) - Finished 2/21
 	- Upload initial Android Studio Project to repo -- Thursday 2/23 by 11pm (estimate: 1 hr) - Finished 2/21
+	- Create API for Client Core -- Sunday 3/5 by 11pm (estimate: 5 hrs)
 
