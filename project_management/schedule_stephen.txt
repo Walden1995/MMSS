@@ -1,4 +1,4 @@
 Schedule and deliverable:
 	- Feature/Item to complete -- Day MM/DD by TIMEpm (estimate: x hrs)
-	- Figure out how to implement git vc with android studio -- 02/21 by 0700 
-	-
+	- Figure out how to implement git vc with android studio -- 02/21 by 0700 #DONE
+	- Implement notifications -- 02/27 by 0700pm (estimate: 16 hrs)
