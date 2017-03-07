@@ -1,3 +1,6 @@
 [submodule "MMSSAndroidApp"]
 	path = MMSSAndroidApp
 	url = https://github.com/Walden1995/MMSSAndroidApp.git
+[submodule "MMSS-Server"]
+	path = MMSS-Server
+	url = https://github.com/BluuArc/MMSS-Server.git
