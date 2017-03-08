@@ -1,7 +1,10 @@
 Schedule and deliverable:
 	- Feature/Item to complete -- Day MM/DD by TIMEpm (estimate: x hrs)
-	- Upload Objectives and Key Requirements for the first week -- Thursday 2/23 by 11pm (estimate: 1 hr)
+	- Upload Objectives and Key Requirements for the first week -- Thursday 2/23 by 11pm (estimate: 1 hr) - Finished 2/21
 	- Figure out how to integrate git into Android Studio -- Thursday 2/23 by 11pm (estimate: 2 hrs) - Finished 2/21
 	- Upload initial Android Studio Project to repo -- Thursday 2/23 by 11pm (estimate: 1 hr) - Finished 2/21
-	- Create API for Client Core -- Sunday 3/12 by 11pm (estimate: 5 hrs)
+	- Create API for Client Core -- Sunday 3/12 by 11pm (estimate: 5 hrs) - Cancelled 3/7
 		- Pushed back date from 3/5 to 3/12 as a recently assigned class assignment helps to develop this (at least conceptually) as a group
+		- Canceled 3/7 as my focus has been shifted to server ser up. Stephen will now have more control and responsibility over the Android App, I (Josh) will handle the creation and implementation of the server, and Joe will handle the creation and implementation of the modules.
+	- Create basic server and client tests for Wizard of Oz demo -- Sunday 3/12 by 11pm (estimate: 16 hrs)
+		- Large amount of time needed for research of how to best implement the server and the programming of the server
