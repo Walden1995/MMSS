@@ -1,4 +1,6 @@
 import java.util.*;
+import org.json.*;
+//source: http://theoryapp.com/parse-json-in-java/
 
 public class PassableModule implements Passable{
 	public String name;
@@ -8,17 +10,38 @@ public class PassableModule implements Passable{
 	public String mainServerID;
 	public ArrayList parameterData;
 
-	public PassableModule(){}
+	public PassableModule(){
+		name = "";
+		type = "";
+		id = "";
+		hubServerID = "";
+		mainServerID = "";
+		parameterData = new ArrayList();
+	}
+
+	public PassableModule(String input){
+		JSONObject parsedInput = new JSONObject(input);
+		name = (String)parsedInput.get("name");
+		type = (String)parsedInput.get("type");
+		id = (String)parsedInput.get("id");
+		hubServerID = (String)parsedInput.get("hubServerID");
+		mainServerID = (String)parsedInput.get("mainServerID");
+		JSONArray parametersArray = (JSONArray)parsedInput.get("parameterData");
+		parameterData = new ArrayList();
+		for(int i = 0; i < parametersArray.length(); ++i){
+			parameterData.add(parametersArray.get(i));
+		}
+	}
 
 	public String toJSON(){
-		String message = "{\"name\": \"" + name.toLowerCase() + "\",";
-		message += "\"type\": \"" + type.toLowerCase() + "\",";
-		message += "\"id\": \"" + id + "\",";
-		message += "\"hubServerID\": \"" + hubServerID + "\",";
-		message += "\"mainServerID\": \"" + mainServerID + "\",";
-		message += "\"parameterData\": " + parameterData;
-		message += "}";
-		return message;
+		JSONObject returnJSONObj = new JSONObject();
+		returnJSONObj.put("name", name.toLowerCase());
+		returnJSONObj.put("type", type.toLowerCase());
+		returnJSONObj.put("id", id);
+		returnJSONObj.put("hubServerID", hubServerID);
+		returnJSONObj.put("mainServerID", mainServerID);
+		returnJSONObj.put("parameterData", parameterData);
+		return returnJSONObj.toString();
 	}
 
 	// example usage
@@ -29,12 +52,14 @@ public class PassableModule implements Passable{
 			myModule.id = "12345abcde";
 			myModule.hubServerID = "10.0.0.5:3030";
 			myModule.mainServerID = "123.456.789:8080";
-			myModule.parameterData = new ArrayList();
 			myModule.parameterData.add(0);
-
+			myModule.parameterData.add("test string");
+			myModule.parameterData.add('c');
+			myModule.parameterData.add(50);
 			System.out.println(myModule.toJSON());
 
-			myModule.parameterData.add("test string");
+			PassableModule myModule2 = new PassableModule(myModule.toJSON());
+			myModule.parameterData.add("a new value");
 			System.out.println(myModule.toJSON());
 	}
 }

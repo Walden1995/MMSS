@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    </head>
+    <body>
+        <h1>JSON Printer</h1>
+        <p>Insert your JSON string into the text area below and then click the button. The resulting values will be output into the other text box.</p>
+        <textarea id="json-area" style="width: 500px;height: 250px;">{"instructions":"Enter JSON String here"}</textarea>
+        <textarea id="value-area" disabled style="width: 500px;height: 250px;">Values found in JSON object will go here.</textarea> 
+        <br>
+        <textarea id="json-area-2" style="width: 500px;height: 250px;">{"instructions":"Enter JSON String here"}</textarea>
+        <textarea id="value-area-2" disabled style="width: 500px;height: 250px;">Values found in JSON object will go here.</textarea> 
+        <br>
+        <button id="json-button" onclick="parseInputs()">Click to view values in JSON string</button>
+
+        <script>
+            function parseJSON(json_obj,output){
+                try{
+                    var jsonObj = JSON.parse(json_obj);
+                    var values = "<key>: <keyValue>\n---\n";
+                    for(key in jsonObj){
+                        values += key + ": " + jsonObj[key] + "\n";
+                    }
+                    output.innerHTML = values;
+                }catch(err){
+                    console.log(err);
+                    output.innerHTML = err;
+                }
+            }
+            function parseInputs(){
+                parseJSON(document.getElementById("json-area").value,document.getElementById("value-area"));
+                parseJSON(document.getElementById("json-area-2").value,document.getElementById("value-area-2"));
+                
+            }
+        </script>
+    </body>
+</html>
