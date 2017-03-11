@@ -6,7 +6,6 @@ public class PassableModule implements Passable{
 	public String name;
 	public String type;
 	public String id;
-	public String hubServerID;
 	public String mainServerID;
 	public ArrayList parameterData;
 
@@ -14,7 +13,6 @@ public class PassableModule implements Passable{
 		name = "";
 		type = "";
 		id = "";
-		hubServerID = "";
 		mainServerID = "";
 		parameterData = new ArrayList();
 	}
@@ -24,7 +22,6 @@ public class PassableModule implements Passable{
 		name = (String)parsedInput.get("name");
 		type = (String)parsedInput.get("type");
 		id = (String)parsedInput.get("id");
-		hubServerID = (String)parsedInput.get("hubServerID");
 		mainServerID = (String)parsedInput.get("mainServerID");
 		JSONArray parametersArray = (JSONArray)parsedInput.get("parameterData");
 		parameterData = new ArrayList();
@@ -38,7 +35,6 @@ public class PassableModule implements Passable{
 		returnJSONObj.put("name", name.toLowerCase());
 		returnJSONObj.put("type", type.toLowerCase());
 		returnJSONObj.put("id", id);
-		returnJSONObj.put("hubServerID", hubServerID);
 		returnJSONObj.put("mainServerID", mainServerID);
 		returnJSONObj.put("parameterData", parameterData);
 		return returnJSONObj.toString();
@@ -50,7 +46,6 @@ public class PassableModule implements Passable{
 			myModule.name = "Front Door Sensor";
 			myModule.type = "sensormodule";
 			myModule.id = "12345abcde";
-			myModule.hubServerID = "10.0.0.5:3030";
 			myModule.mainServerID = "123.456.789:8080";
 			myModule.parameterData.add(0);
 			myModule.parameterData.add("test string");
