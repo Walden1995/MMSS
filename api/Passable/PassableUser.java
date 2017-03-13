@@ -8,6 +8,7 @@ public class PassableUser implements Passable{
 	public String id;
 	public ArrayList logs;
 	public ArrayList notifications;
+	public boolean isBeingListened;
 
 	public PassableUser(){
 		name = "";
@@ -15,6 +16,7 @@ public class PassableUser implements Passable{
 		id = "";
 		logs = new ArrayList();
 		notifications = new ArrayList();
+		isBeingListened = false;
 	}
 
 	public PassableUser(String input){
@@ -22,7 +24,7 @@ public class PassableUser implements Passable{
 		name = (String)parsedInput.get("name");
 		type = (String)parsedInput.get("type");
 		id = (String)parsedInput.get("id");
-		
+		isBeingListened = (boolean)parsedInput.get("isBeingListened");		
 		
 		JSONArray logsInput = (JSONArray)parsedInput.get("logs");
 		logs = new ArrayList();
@@ -44,7 +46,12 @@ public class PassableUser implements Passable{
 		returnJSONObj.put("id", id);
 		returnJSONObj.put("logs", logs);
 		returnJSONObj.put("notifications", notifications);
+		returnJSONObj.put("isBeingListened", isBeingListened);
 		return returnJSONObj.toString();
+	}
+
+	public boolean isBeingListened(){
+		return isBeingListened;
 	}
 
 	// example usage

@@ -8,6 +8,7 @@ public class PassableModule implements Passable{
 	public String id;
 	public String mainServerID;
 	public ArrayList parameterData;
+	public boolean isBeingListened;
 
 	public PassableModule(){
 		name = "";
@@ -15,6 +16,7 @@ public class PassableModule implements Passable{
 		id = "";
 		mainServerID = "";
 		parameterData = new ArrayList();
+		isBeingListened = false;
 	}
 
 	public PassableModule(String input){
@@ -22,6 +24,7 @@ public class PassableModule implements Passable{
 		name = (String)parsedInput.get("name");
 		type = (String)parsedInput.get("type");
 		id = (String)parsedInput.get("id");
+		isBeingListened = (boolean)parsedInput.get("isBeingListened");
 		mainServerID = (String)parsedInput.get("mainServerID");
 		JSONArray parametersArray = (JSONArray)parsedInput.get("parameterData");
 		parameterData = new ArrayList();
@@ -37,7 +40,12 @@ public class PassableModule implements Passable{
 		returnJSONObj.put("id", id);
 		returnJSONObj.put("mainServerID", mainServerID);
 		returnJSONObj.put("parameterData", parameterData);
+		returnJSONObj.put("isBeingListened", isBeingListened);
 		return returnJSONObj.toString();
+	}
+
+	public boolean isBeingListened(){
+		return isBeingListened;
 	}
 
 	// example usage
