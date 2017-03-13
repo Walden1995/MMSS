@@ -19,20 +19,32 @@ public class PassableUser implements Passable{
 		isBeingListened = false;
 	}
 
-	public PassableUser(String input){
+	private Object safelyGet(JSONObject json, String member, Object defaultValue){
+		try{
+			return json.get(member);
+		}catch(Exception e){
+			return defaultValue;
+		}
+	}
+
+	public PassableUser(String input) throws Exception{
+		PassableUser defaultUser = new PassableUser();
 		JSONObject parsedInput = new JSONObject(input);
-		name = (String)parsedInput.get("name");
-		type = (String)parsedInput.get("type");
-		id = (String)parsedInput.get("id");
-		isBeingListened = (boolean)parsedInput.get("isBeingListened");		
+		id = (String) safelyGet(parsedInput, "id", defaultUser.id);
+		if(id.equals("")){ //at the very minimum, ID must be valid
+			throw new Exception("Error: Problem trying to get ID");
+		}
+		name = (String) safelyGet(parsedInput, "name", defaultUser.name);
+		type = (String) safelyGet(parsedInput, "type", defaultUser.type);
+		isBeingListened = (boolean) safelyGet(parsedInput, "isBeingListened", defaultUser.isBeingListened);
 		
-		JSONArray logsInput = (JSONArray)parsedInput.get("logs");
+		JSONArray logsInput = (JSONArray) safelyGet(parsedInput, "logs", defaultUser.logs);
 		logs = new ArrayList();
 		for(int i = 0; i < logsInput.length(); ++i){
 			logs.add(logsInput.get(i));
 		}
 
-		JSONArray notificationsInput = (JSONArray)parsedInput.get("notifications");
+		JSONArray notificationsInput = (JSONArray) safelyGet(parsedInput, "notifications", defaultUser.notifications);
 		notifications = new ArrayList();
 		for(int i = 0; i < notificationsInput.length(); ++i){
 			notifications.add(notificationsInput.get(i));
@@ -56,17 +68,21 @@ public class PassableUser implements Passable{
 
 	// example usage
 	public static void main(String[] args) {
-			PassableUser myUser = new PassableUser();
-			myUser.name = "John Doe";
-			myUser.type = "guardian";
-			myUser.id = "12345abcde";
-			myUser.logs.add("log 1");
-			myUser.notifications.add("note 1");
-			System.out.println(myUser.toJSON());
-
+		PassableUser myUser = new PassableUser();
+		myUser.name = "John Doe";
+		myUser.type = "guardian";
+		myUser.id = "12345abcde";
+		myUser.logs.add("log 1");
+		myUser.notifications.add("note 1");
+		System.out.println(myUser.toJSON());
+		try{
 			PassableUser myUser2 = new PassableUser(myUser.toJSON());
 			myUser2.logs.add("log 2");
 			myUser2.notifications.add("note 2");
 			System.out.println(myUser2.toJSON());
+		}catch(Exception e){
+			System.out.println("ID '" + myUser.id + "' is invalid");
+		}
+			
 	}
 }
