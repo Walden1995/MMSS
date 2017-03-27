@@ -46,7 +46,8 @@ public class PassableModule implements Passable{
 		}
 	}
 
-	public String toJSON(){
+	//Exception shouldn't happen unless one or more of the values are invalid
+	public String toJSON() throws Exception{
 		JSONObject returnJSONObj = new JSONObject();
 		returnJSONObj.put("name", name.toLowerCase());
 		returnJSONObj.put("type", type.toLowerCase());
@@ -72,9 +73,9 @@ public class PassableModule implements Passable{
 		myModule.parameterData.add("test string");
 		myModule.parameterData.add('c');
 		myModule.parameterData.add(50);
-		System.out.println(myModule.toJSON());
 
 		try{
+			System.out.println(myModule.toJSON());
 			PassableModule myModule2 = new PassableModule(myModule.toJSON());
 			myModule.parameterData.add("a new value");
 			System.out.println(myModule.toJSON());

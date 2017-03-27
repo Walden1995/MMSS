@@ -51,7 +51,8 @@ public class PassableUser implements Passable{
 		}
 	}
 
-	public String toJSON(){
+	//Exception shouldn't happen unless one or more of the values are invalid
+	public String toJSON() throws Exception{
 		JSONObject returnJSONObj = new JSONObject();
 		returnJSONObj.put("name", name.toLowerCase());
 		returnJSONObj.put("type", type.toLowerCase());
@@ -74,8 +75,8 @@ public class PassableUser implements Passable{
 		myUser.id = "12345abcde";
 		myUser.logs.add("log 1");
 		myUser.notifications.add("note 1");
-		System.out.println(myUser.toJSON());
 		try{
+			System.out.println(myUser.toJSON());
 			PassableUser myUser2 = new PassableUser(myUser.toJSON());
 			myUser2.logs.add("log 2");
 			myUser2.notifications.add("note 2");
