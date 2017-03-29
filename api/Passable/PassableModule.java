@@ -9,12 +9,13 @@ public class PassableModule implements Passable{
 	public String mainServerID;
 	public ArrayList parameterData;
 	public boolean isBeingListened;
-
+	public String message;
 	public PassableModule(){
 		name = "";
 		type = "";
 		id = "";
 		mainServerID = "";
+		message = "";
 		parameterData = new ArrayList();
 		isBeingListened = false;
 	}
@@ -44,6 +45,7 @@ public class PassableModule implements Passable{
 		for(int i = 0; i < parametersArray.length(); ++i){
 			parameterData.add(parametersArray.get(i));
 		}
+		message = (String) safelyGet(parsedInput, "message", defaultModule.message);
 	}
 
 	//Exception shouldn't happen unless one or more of the values are invalid
@@ -55,6 +57,7 @@ public class PassableModule implements Passable{
 		returnJSONObj.put("mainServerID", mainServerID);
 		returnJSONObj.put("parameterData", parameterData);
 		returnJSONObj.put("isBeingListened", isBeingListened);
+		returnJSONObj.put("message",message);
 		return returnJSONObj.toString();
 	}
 
@@ -73,12 +76,14 @@ public class PassableModule implements Passable{
 		myModule.parameterData.add("test string");
 		myModule.parameterData.add('c');
 		myModule.parameterData.add(50);
+		myModule.message = "Test message";
 
 		try{
 			System.out.println(myModule.toJSON());
 			PassableModule myModule2 = new PassableModule(myModule.toJSON());
-			myModule.parameterData.add("a new value");
-			System.out.println(myModule.toJSON());
+			myModule2.parameterData.add("a new value");
+			myModule2.message = "a new message";
+			System.out.println(myModule2.toJSON());
 		}catch(Exception e){
 			System.out.println("ID '" + myModule.id + "' is invalid");
 		}
