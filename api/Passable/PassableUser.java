@@ -9,6 +9,7 @@ public class PassableUser implements Passable{
 	public ArrayList logs;
 	public ArrayList notifications;
 	public boolean isBeingListened;
+	public ServerDate lastUpdated;
 
 	public PassableUser(){
 		name = "";
@@ -17,6 +18,7 @@ public class PassableUser implements Passable{
 		logs = new ArrayList();
 		notifications = new ArrayList();
 		isBeingListened = false;
+		lastUpdated = new ServerDate();
 	}
 
 	private Object safelyGet(JSONObject json, String member, Object defaultValue){
@@ -49,6 +51,12 @@ public class PassableUser implements Passable{
 		for(int i = 0; i < notificationsInput.length(); ++i){
 			notifications.add(notificationsInput.get(i));
 		}
+
+		String date = (String) safelyGet(parsedInput, "last_update_time", "");
+		if(date.length() > 0)
+			lastUpdated = new ServerDate(date);
+		else
+			lastUpdated = new ServerDate();
 	}
 
 	//Exception shouldn't happen unless one or more of the values are invalid
@@ -60,6 +68,7 @@ public class PassableUser implements Passable{
 		returnJSONObj.put("logs", logs);
 		returnJSONObj.put("notifications", notifications);
 		returnJSONObj.put("isBeingListened", isBeingListened);
+		returnJSONObj.put("last_update_time", lastUpdated.toString());
 		return returnJSONObj.toString();
 	}
 
