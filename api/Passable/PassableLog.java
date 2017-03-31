@@ -3,18 +3,18 @@ import org.json.*;
 //source: http://theoryapp.com/parse-json-in-java/
 
 public class PassableLog implements Passable{
-	public String id;
+	public PassableShortInfo authorInfo;
 	public ArrayList parameterData;
 	public ServerDate time;
 	public String message;
-	public String type;
+	public String subjectType;
 
 	public PassableLog(){
-		id = "";
+		authorInfo = new PassableShortInfo("","");
 		parameterData = new ArrayList();
 		time = new ServerDate("1970-01-01 00:00:00");
 		message = "No log message was input into this field.";
-		type = "none";
+		subjectType = "none";
 	}
 
 	//input is a JSON Object as a string
@@ -31,14 +31,16 @@ public class PassableLog implements Passable{
 	}
 
 	public PassableLog(JSONObject parsedInput) throws Exception{
-		PassableLog defaultUser = new PassableLog();
-		id = (String) safelyGet(parsedInput, "id", defaultUser.id);
-		if(id.equals("")){ //at the very minimum, ID must be valid
-			throw new Exception("Error: Problem trying to get ID");
+		PassableLog defaultLog = new PassableLog();
+		JSONObject authorJSON = (JSONObject) safelyGet(parsedInput,"author_info", defaultLog.authorInfo.toJSONObject());
+		try{
+			authorInfo = new PassableShortInfo(authorJSON);
+		}catch(Exception e){
+			throw new Exception("Error: Problem trying to get author_info");
 		}
 
-		message = (String) safelyGet(parsedInput, "message", defaultUser.message);
-		type = (String) safelyGet(parsedInput, "type", defaultUser.type);
+		message = (String) safelyGet(parsedInput, "message", defaultLog.message);
+		subjectType = (String) safelyGet(parsedInput, "subject_type", defaultLog.subjectType);
 		
 		String date = (String) safelyGet(parsedInput, "time", "");
 		if(date.length() > 0)
@@ -56,9 +58,9 @@ public class PassableLog implements Passable{
 	//Exception shouldn't happen unless one or more of the values are invalid
 	public JSONObject toJSONObject() throws Exception{
 		JSONObject returnJSONObj = new JSONObject();
-		returnJSONObj.put("id", id);
+		returnJSONObj.put("author_info", authorInfo.toJSONObject());
 		returnJSONObj.put("time", time.toString());
-		returnJSONObj.put("type", type.toLowerCase());
+		returnJSONObj.put("subject_type", subjectType.toLowerCase());
 		returnJSONObj.put("message", message);
 		JSONArray paramJSON = new JSONArray();
 		for(int i = 0; i < parameterData.size(); ++i){
@@ -80,13 +82,13 @@ public class PassableLog implements Passable{
 	// example usage
 	public static void main(String[] args) {
 		PassableLog logEntry = new PassableLog();
-		logEntry.id = "12345abcde";
-		logEntry.type = "module";
+		logEntry.subjectType = "module";
 		logEntry.message = "I am the first log entry";
 		logEntry.parameterData.add("param 1");
 		try{
 			System.out.println(logEntry.toJSON());
 			PassableLog logEntry2 = new PassableLog(logEntry.toJSON());
+			logEntry2.authorInfo = new PassableShortInfo("4mdmin","user");
 			logEntry2.parameterData.add("param 2");
 			logEntry2.message = "I am the second log entry";
 			logEntry2.time = new ServerDate();
