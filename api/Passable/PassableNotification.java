@@ -6,13 +6,13 @@ public class PassableNotification implements Passable{
 	public boolean success;
 	public String message;
 	public ServerDate time;
-	public ArrayList<PassablePageInfo> data;
+	public ArrayList<PassableShortInfo> data;
 
 	public PassableNotification(){
 		success = false;
 		message = "No message received or invalid response from server";
 		time = new ServerDate("1970-01-01 00:00:00");
-		data = new ArrayList<PassablePageInfo>();
+		data = new ArrayList<PassableShortInfo>();
 	}
 
 	//input is a JSON Object as a string
@@ -44,10 +44,10 @@ public class PassableNotification implements Passable{
 
 		message = (String) safelyGet(parsedInput, "message", defaultNotification.message);
 		JSONArray dataArray = (JSONArray) safelyGet(parsedInput, "data", defaultNotification.data);
-		data = new ArrayList<PassablePageInfo>();
+		data = new ArrayList<PassableShortInfo>();
 		for(int i = 0; i < dataArray.length(); ++i){
 			JSONObject curObject = (JSONObject) dataArray.get(i);
-			data.add(new PassablePageInfo(curObject));
+			data.add(new PassableShortInfo(curObject));
 		}
 	}
 
@@ -64,7 +64,7 @@ public class PassableNotification implements Passable{
 		returnJSONObj.put("time", time);
 		JSONArray tempArray = new JSONArray();
 		for(int i = 0; i < data.size(); ++i){
-			PassablePageInfo curPage = (PassablePageInfo) data.get(i);
+			PassableShortInfo curPage = (PassableShortInfo) data.get(i);
 			tempArray.put(curPage.toJSONObject());
 		}
 		returnJSONObj.put("data",tempArray);
@@ -78,13 +78,13 @@ public class PassableNotification implements Passable{
 	// example usage
 	public static void main(String[] args) {
 		PassableNotification myResponse = new PassableNotification();
-		myResponse.data.add(new PassablePageInfo("myType", "myID"));
+		myResponse.data.add(new PassableShortInfo("myType", "myID"));
 		try{
 			System.out.println(myResponse.toJSON());
 			PassableNotification myResponse2 = new PassableNotification(myResponse.toJSON());
 			myResponse2.success = true;
 			myResponse2.message = "A whole new message";
-			myResponse2.data.add(new PassablePageInfo("newType","newID"));
+			myResponse2.data.add(new PassableShortInfo("newType","newID"));
 			myResponse2.time = new ServerDate();
 			System.out.println(myResponse2.toJSON());
 		}catch(Exception e){
@@ -95,16 +95,16 @@ public class PassableNotification implements Passable{
 	}
 }
 
-class PassablePageInfo implements Passable{
+class PassableShortInfo implements Passable{
 	public String type;
 	public String id;
 
-	public PassablePageInfo(){
+	public PassableShortInfo(){
 		type = "none";
 		id = "";
 	}
 
-	public PassablePageInfo(String inType, String inID){
+	public PassableShortInfo(String inType, String inID){
 		type = inType;
 		id = inID;
 	}
@@ -117,8 +117,8 @@ class PassablePageInfo implements Passable{
 		}
 	}
 
-	public PassablePageInfo(String input) throws Exception{
-		PassablePageInfo defaultPageInfo = new PassablePageInfo();
+	public PassableShortInfo(String input) throws Exception{
+		PassableShortInfo defaultPageInfo = new PassableShortInfo();
 		JSONObject parsedInput = new JSONObject(input);
 		type = (String) safelyGet(parsedInput, "type", defaultPageInfo.type);
 		if(type.length() == 0){
@@ -130,8 +130,8 @@ class PassablePageInfo implements Passable{
 		}
 	}
 
-	public PassablePageInfo(JSONObject parsedInput) throws Exception{
-		PassablePageInfo defaultPageInfo = new PassablePageInfo();
+	public PassableShortInfo(JSONObject parsedInput) throws Exception{
+		PassableShortInfo defaultPageInfo = new PassableShortInfo();
 		type = (String) safelyGet(parsedInput, "type", defaultPageInfo.type);
 		if(type.length() == 0){
 			throw new Exception("Error: No type specified");
@@ -160,12 +160,12 @@ class PassablePageInfo implements Passable{
 
 	// example usage
 	public static void main(String[] args) {
-		PassablePageInfo myPage = new PassablePageInfo();
+		PassableShortInfo myPage = new PassableShortInfo();
 		myPage.id = "123";
 		myPage.type = "module";
 		try{
 			System.out.println(myPage.toJSON());
-			PassablePageInfo myPage2 = new PassablePageInfo(myPage.toJSON());
+			PassableShortInfo myPage2 = new PassableShortInfo(myPage.toJSON());
 			myPage2.id = "456";
 			myPage2.type = "user";
 			System.out.println(myPage2.toJSON());
