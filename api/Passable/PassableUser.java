@@ -72,7 +72,7 @@ public class PassableUser implements Passable{
 	}
 
 	//Exception shouldn't happen unless one or more of the values are invalid
-	public String toJSON() throws Exception{
+	public JSONObject toJSONObject() throws Exception {
 		JSONObject returnJSONObj = new JSONObject();
 		returnJSONObj.put("editor_info", editorInfo.toJSONObject());
 		returnJSONObj.put("name", name.toLowerCase());
@@ -80,14 +80,14 @@ public class PassableUser implements Passable{
 		returnJSONObj.put("id", id);
 
 		JSONArray logsJSON = new JSONArray();
-		for(int i = 0; i < logs.size(); ++i){
+		for (int i = 0; i < logs.size(); ++i) {
 			PassableLog curLog = (PassableLog) logs.get(i);
 			logsJSON.put(curLog.toJSONObject());
 		}
 		returnJSONObj.put("logs", logsJSON);
 
 		JSONArray notifsJSON = new JSONArray();
-		for(int i = 0; i < notifications.size(); ++i){
+		for (int i = 0; i < notifications.size(); ++i) {
 			PassableNotification curNotif = (PassableNotification) notifications.get(i);
 			notifsJSON.put(curNotif.toJSONObject());
 		}
@@ -95,7 +95,12 @@ public class PassableUser implements Passable{
 
 		returnJSONObj.put("isBeingListened", isBeingListened);
 		returnJSONObj.put("last_update_time", lastUpdated.toString());
-		return returnJSONObj.toString();
+		return returnJSONObj;
+	}
+
+	//Exception shouldn't happen unless one or more of the values are invalid
+	public String toJSON() throws Exception{
+		return toJSONObject().toString();
 	}
 
 	public boolean isBeingListened(){
@@ -110,7 +115,8 @@ public class PassableUser implements Passable{
 		myUser.id = "12345abcde";
 
 		PassableLog log1 = new PassableLog();
-		log1.id = "moduleid";
+		// log1.id = "moduleid";
+		log1.authorInfo = new PassableShortInfo("moduleid","module");
 		myUser.logs.add(log1);
 
 		PassableNotification note1 = new PassableNotification();
@@ -121,7 +127,8 @@ public class PassableUser implements Passable{
 			PassableUser myUser2 = new PassableUser(myUser.toJSON());
 			myUser2.lastUpdated = new ServerDate();
 			PassableLog log2 = new PassableLog();
-			log2.id = "moduleid2";
+			// log2.id = "moduleid2";
+			log2.authorInfo = new PassableShortInfo("moduleid2", "module");
 			log2.message = "A whole new log message";
 			log2.time = new ServerDate();
 			myUser2.logs.add(log2);

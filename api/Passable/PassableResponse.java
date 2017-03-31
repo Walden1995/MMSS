@@ -30,11 +30,16 @@ public class PassableResponse implements Passable{
 	}
 
 	//Exception shouldn't happen unless one or more of the values are invalid
-	public String toJSON() throws Exception{
+	public JSONObject toJSONObject() throws Exception {
 		JSONObject returnJSONObj = new JSONObject();
 		returnJSONObj.put("success", success);
 		returnJSONObj.put("message", message);
-		return returnJSONObj.toString();
+		return returnJSONObj;
+	}
+
+	//Exception shouldn't happen unless one or more of the values are invalid
+	public String toJSON() throws Exception{
+		return toJSONObject().toString();
 	}
 
 	public boolean isBeingListened(){

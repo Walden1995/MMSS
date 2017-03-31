@@ -63,12 +63,17 @@ public class PassableLogRequest implements Passable{
 	}
 
 	//Exception shouldn't happen unless one or more of the values are invalid
-	public String toJSON() throws Exception{
+	public JSONObject toJSONObject() throws Exception {
 		JSONObject returnJSONObj = new JSONObject();
 		returnJSONObj.put("id", id);
 		returnJSONObj.put("start_time", start_time.toString());
 		returnJSONObj.put("end_time", end_time.toString());
-		return returnJSONObj.toString();
+		return returnJSONObj;
+	}
+
+	//Exception shouldn't happen unless one or more of the values are invalid
+	public String toJSON() throws Exception{
+		return toJSONObject().toString();
 	}
 
 	public boolean isBeingListened(){
