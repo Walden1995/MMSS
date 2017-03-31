@@ -6,8 +6,8 @@ public class PassableUser implements Passable{
 	public String name;
 	public String type;
 	public String id;
-	public ArrayList logs;
-	public ArrayList notifications;
+	public ArrayList<PassableLog> logs;
+	public ArrayList<PassableNotification> notifications;
 	public boolean isBeingListened;
 	public ServerDate lastUpdated;
 
@@ -15,10 +15,10 @@ public class PassableUser implements Passable{
 		name = "";
 		type = "";
 		id = "";
-		logs = new ArrayList();
-		notifications = new ArrayList();
+		logs = new ArrayList<PassableLog>();
+		notifications = new ArrayList<PassableNotification>();
 		isBeingListened = false;
-		lastUpdated = new ServerDate();
+		lastUpdated = new ServerDate("1970-01-01 00:00:00");
 	}
 
 	private Object safelyGet(JSONObject json, String member, Object defaultValue){
@@ -41,15 +41,17 @@ public class PassableUser implements Passable{
 		isBeingListened = (boolean) safelyGet(parsedInput, "isBeingListened", defaultUser.isBeingListened);
 		
 		JSONArray logsInput = (JSONArray) safelyGet(parsedInput, "logs", defaultUser.logs);
-		logs = new ArrayList();
+		logs = new ArrayList<PassableLog>();
 		for(int i = 0; i < logsInput.length(); ++i){
-			logs.add(logsInput.get(i));
+			JSONObject curObject = (JSONObject) logsInput.get(i);
+			logs.add(new PassableLog(curObject));
 		}
 
 		JSONArray notificationsInput = (JSONArray) safelyGet(parsedInput, "notifications", defaultUser.notifications);
-		notifications = new ArrayList();
+		notifications = new ArrayList<PassableNotification>();
 		for(int i = 0; i < notificationsInput.length(); ++i){
-			notifications.add(notificationsInput.get(i));
+			JSONObject curObject = (JSONObject) notificationsInput.get(i);
+			notifications.add(new PassableNotification(curObject));
 		}
 
 		String date = (String) safelyGet(parsedInput, "last_update_time", "");
@@ -65,8 +67,21 @@ public class PassableUser implements Passable{
 		returnJSONObj.put("name", name.toLowerCase());
 		returnJSONObj.put("type", type.toLowerCase());
 		returnJSONObj.put("id", id);
-		returnJSONObj.put("logs", logs);
-		returnJSONObj.put("notifications", notifications);
+
+		JSONArray logsJSON = new JSONArray();
+		for(int i = 0; i < logs.size(); ++i){
+			PassableLog curLog = (PassableLog) logs.get(i);
+			logsJSON.put(curLog.toJSONObject());
+		}
+		returnJSONObj.put("logs", logsJSON);
+
+		JSONArray notifsJSON = new JSONArray();
+		for(int i = 0; i < notifications.size(); ++i){
+			PassableNotification curNotif = (PassableNotification) notifications.get(i);
+			notifsJSON.put(curNotif.toJSONObject());
+		}
+		returnJSONObj.put("notifications", notifsJSON);
+
 		returnJSONObj.put("isBeingListened", isBeingListened);
 		returnJSONObj.put("last_update_time", lastUpdated.toString());
 		return returnJSONObj.toString();
@@ -82,13 +97,29 @@ public class PassableUser implements Passable{
 		myUser.name = "John Doe";
 		myUser.type = "guardian";
 		myUser.id = "12345abcde";
-		myUser.logs.add("log 1");
-		myUser.notifications.add("note 1");
+
+		PassableLog log1 = new PassableLog();
+		log1.id = "moduleid";
+		myUser.logs.add(log1);
+
+		PassableNotification note1 = new PassableNotification();
+		note1.success = true;
+		myUser.notifications.add(note1);
 		try{
 			System.out.println(myUser.toJSON());
 			PassableUser myUser2 = new PassableUser(myUser.toJSON());
-			myUser2.logs.add("log 2");
-			myUser2.notifications.add("note 2");
+			myUser2.lastUpdated = new ServerDate();
+			PassableLog log2 = new PassableLog();
+			log2.id = "moduleid2";
+			log2.message = "A whole new log message";
+			log2.time = new ServerDate();
+			myUser2.logs.add(log2);
+
+			PassableNotification note2 = new PassableNotification();
+			note2.success = false;
+			note2.time = new ServerDate();
+			note2.message = "A whole new notification";
+			myUser2.notifications.add(note2);
 			System.out.println(myUser2.toJSON());
 		}catch(Exception e){
 			System.out.println("ID '" + myUser.id + "' is invalid");
