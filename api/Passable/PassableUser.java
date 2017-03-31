@@ -3,6 +3,7 @@ import org.json.*;
 //source: http://theoryapp.com/parse-json-in-java/
 
 public class PassableUser implements Passable{
+	public PassableShortInfo editorInfo;
 	public String name;
 	public String type;
 	public String id;
@@ -19,6 +20,7 @@ public class PassableUser implements Passable{
 		notifications = new ArrayList<PassableNotification>();
 		isBeingListened = false;
 		lastUpdated = new ServerDate("1970-01-01 00:00:00");
+		editorInfo = new PassableShortInfo("","");
 	}
 
 	private Object safelyGet(JSONObject json, String member, Object defaultValue){
@@ -36,6 +38,14 @@ public class PassableUser implements Passable{
 		if(id.equals("")){ //at the very minimum, ID must be valid
 			throw new Exception("Error: Problem trying to get ID");
 		}
+
+		JSONObject editorJSON = (JSONObject) safelyGet(parsedInput,"editor_info", defaultUser.editorInfo.toJSONObject());
+		try{
+			editorInfo = new PassableShortInfo(editorJSON);
+		}catch(Exception e){
+			editorInfo = new PassableShortInfo("","");
+		}
+
 		name = (String) safelyGet(parsedInput, "name", defaultUser.name);
 		type = (String) safelyGet(parsedInput, "type", defaultUser.type);
 		isBeingListened = (boolean) safelyGet(parsedInput, "isBeingListened", defaultUser.isBeingListened);
@@ -64,6 +74,7 @@ public class PassableUser implements Passable{
 	//Exception shouldn't happen unless one or more of the values are invalid
 	public String toJSON() throws Exception{
 		JSONObject returnJSONObj = new JSONObject();
+		returnJSONObj.put("editor_info", editorInfo.toJSONObject());
 		returnJSONObj.put("name", name.toLowerCase());
 		returnJSONObj.put("type", type.toLowerCase());
 		returnJSONObj.put("id", id);
@@ -120,6 +131,8 @@ public class PassableUser implements Passable{
 			note2.time = new ServerDate();
 			note2.message = "A whole new notification";
 			myUser2.notifications.add(note2);
+
+			myUser2.editorInfo = new PassableShortInfo("4dm1n","user");
 			System.out.println(myUser2.toJSON());
 		}catch(Exception e){
 			System.out.println("ID '" + myUser.id + "' is invalid");

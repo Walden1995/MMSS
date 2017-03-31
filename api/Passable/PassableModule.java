@@ -3,6 +3,7 @@ import org.json.*;
 //source: http://theoryapp.com/parse-json-in-java/
 
 public class PassableModule implements Passable{
+	public PassableShortInfo editorInfo;
 	public String name;
 	public String type;
 	public String id;
@@ -17,6 +18,7 @@ public class PassableModule implements Passable{
 		mainServerID = "";
 		parameterData = new ArrayList();
 		isBeingListened = false;
+		editorInfo = new PassableShortInfo("","");
 	}
 
 	private Object safelyGet(JSONObject json, String member, Object defaultValue){
@@ -34,6 +36,14 @@ public class PassableModule implements Passable{
 		if(id.equals("")){ //at the very minimum, ID must be valid
 			throw new Exception("Error: Problem trying to get ID");
 		}
+
+		JSONObject editorJSON = (JSONObject) safelyGet(parsedInput,"editor_info", defaultModule.editorInfo.toJSONObject());
+		try{
+			editorInfo = new PassableShortInfo(editorJSON);
+		}catch(Exception e){
+			editorInfo = new PassableShortInfo("","");
+		}
+
 		name = (String) safelyGet(parsedInput, "name", defaultModule.name);
 		type = (String) safelyGet(parsedInput, "type", defaultModule.type);
 		isBeingListened = (boolean) safelyGet(parsedInput, "isBeingListened", defaultModule.isBeingListened);
@@ -49,6 +59,7 @@ public class PassableModule implements Passable{
 	//Exception shouldn't happen unless one or more of the values are invalid
 	public String toJSON() throws Exception{
 		JSONObject returnJSONObj = new JSONObject();
+		returnJSONObj.put("editor_info", editorInfo.toJSONObject());
 		returnJSONObj.put("name", name.toLowerCase());
 		returnJSONObj.put("type", type.toLowerCase());
 		returnJSONObj.put("id", id);
@@ -77,6 +88,7 @@ public class PassableModule implements Passable{
 		try{
 			System.out.println(myModule.toJSON());
 			PassableModule myModule2 = new PassableModule(myModule.toJSON());
+			myModule2.editorInfo = new PassableShortInfo("4dm1n","user");
 			myModule2.parameterData.add("a new value");
 			System.out.println(myModule2.toJSON());
 		}catch(Exception e){
