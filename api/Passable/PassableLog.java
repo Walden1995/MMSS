@@ -17,6 +17,11 @@ public class PassableLog implements Passable{
 		type = "none";
 	}
 
+	//input is a JSON Object as a string
+	public PassableLog(String input) throws Exception{
+		this(new JSONObject(input));
+	}
+
 	private Object safelyGet(JSONObject json, String member, Object defaultValue){
 		try{
 			return json.get(member);
@@ -25,9 +30,8 @@ public class PassableLog implements Passable{
 		}
 	}
 
-	public PassableLog(String input) throws Exception{
+	public PassableLog(JSONObject parsedInput) throws Exception{
 		PassableLog defaultUser = new PassableLog();
-		JSONObject parsedInput = new JSONObject(input);
 		id = (String) safelyGet(parsedInput, "id", defaultUser.id);
 		if(id.equals("")){ //at the very minimum, ID must be valid
 			throw new Exception("Error: Problem trying to get ID");
@@ -35,7 +39,6 @@ public class PassableLog implements Passable{
 
 		message = (String) safelyGet(parsedInput, "message", defaultUser.message);
 		type = (String) safelyGet(parsedInput, "type", defaultUser.type);
-		
 		
 		String date = (String) safelyGet(parsedInput, "time", "");
 		if(date.length() > 0)
@@ -51,7 +54,7 @@ public class PassableLog implements Passable{
 	}
 
 	//Exception shouldn't happen unless one or more of the values are invalid
-	public String toJSON() throws Exception{
+	public JSONObject toJSONObject() throws Exception{
 		JSONObject returnJSONObj = new JSONObject();
 		returnJSONObj.put("id", id);
 		returnJSONObj.put("time", time.toString());
@@ -62,7 +65,12 @@ public class PassableLog implements Passable{
 			paramJSON.put(parameterData.get(i));
 		}
 		returnJSONObj.put("parameterData", paramJSON);
-		return returnJSONObj.toString();
+		return returnJSONObj;
+	}
+
+	//Exception shouldn't happen unless one or more of the values are invalid
+	public String toJSON() throws Exception{
+		return toJSONObject().toString();
 	}
 
 	public boolean isBeingListened(){
