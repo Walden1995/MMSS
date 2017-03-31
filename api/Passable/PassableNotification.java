@@ -5,14 +5,19 @@ import org.json.*;
 public class PassableNotification implements Passable{
 	public boolean success;
 	public String message;
-	public String time;
+	public ServerDate time;
 	public ArrayList<PassablePageInfo> data;
 
 	public PassableNotification(){
 		success = false;
 		message = "No message received or invalid response from server";
-		time = "1970-01-01 00:00:00";
+		time = new ServerDate("1970-01-01 00:00:00");
 		data = new ArrayList<PassablePageInfo>();
+	}
+
+	//input is a JSON Object as a string
+	public PassableNotification(String input) throws Exception{
+		this(new JSONObject(input));
 	}
 
 	private Object safelyGet(JSONObject json, String member, Object defaultValue){
@@ -23,15 +28,21 @@ public class PassableNotification implements Passable{
 		}
 	}
 
-	public PassableNotification(String input) throws Exception{
+	public PassableNotification(JSONObject parsedInput) throws Exception{
 		PassableNotification defaultNotification = new PassableNotification();
-		JSONObject parsedInput = new JSONObject(input);
+		// JSONObject parsedInput = new JSONObject(input);
 		success = (boolean) safelyGet(parsedInput, "success", defaultNotification.success);
 		if(success != true && success != false){//shouldn't happen
 			throw new Exception("Error: Problem trying to get success boolean");
 		}
+
+		String date = (String) safelyGet(parsedInput, "time", "");
+		if(date.length() > 0)
+			time = new ServerDate(date);
+		else
+			throw new Exception("Error: Problem trying to get time data");
+
 		message = (String) safelyGet(parsedInput, "message", defaultNotification.message);
-		time = (String) safelyGet(parsedInput, "time", defaultNotification.time);
 		JSONArray dataArray = (JSONArray) safelyGet(parsedInput, "data", defaultNotification.data);
 		data = new ArrayList<PassablePageInfo>();
 		for(int i = 0; i < dataArray.length(); ++i){
@@ -42,6 +53,11 @@ public class PassableNotification implements Passable{
 
 	//Exception shouldn't happen unless one or more of the values are invalid
 	public String toJSON() throws Exception{
+		return toJSONObject().toString();
+	}
+
+	//Exception shouldn't happen unless one or more of the values are invalid
+	public JSONObject toJSONObject() throws Exception{
 		JSONObject returnJSONObj = new JSONObject();
 		returnJSONObj.put("success", success);
 		returnJSONObj.put("message", message);
@@ -52,7 +68,7 @@ public class PassableNotification implements Passable{
 			tempArray.put(curPage.toJSONObject());
 		}
 		returnJSONObj.put("data",tempArray);
-		return returnJSONObj.toString();
+		return returnJSONObj;
 	}
 
 	public boolean isBeingListened(){
@@ -69,6 +85,7 @@ public class PassableNotification implements Passable{
 			myResponse2.success = true;
 			myResponse2.message = "A whole new message";
 			myResponse2.data.add(new PassablePageInfo("newType","newID"));
+			myResponse2.time = new ServerDate();
 			System.out.println(myResponse2.toJSON());
 		}catch(Exception e){
 			System.out.println(e);
