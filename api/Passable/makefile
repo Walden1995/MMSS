@@ -1,6 +1,5 @@
 build:
-	javac PassableModule.java
-	javac PassableUser.java
+	javac Passable*.java
 
 test-module:
 	java PassableModule
@@ -9,5 +8,5 @@ test-user:
 	java PassableUser
 
 clean:
-	rm Passable.class PassableModule.class PassableUser.class
+	rm Passable*.class
 
