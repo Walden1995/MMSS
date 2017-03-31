@@ -4,14 +4,14 @@ import org.json.*;
 
 public class PassableLog implements Passable{
 	public PassableShortInfo authorInfo;
-	public ArrayList parameterData;
-	public ServerDate time;
 	public String message;
+	public ServerDate time;
 	public String subjectType;
+	public ArrayList data;
 
 	public PassableLog(){
-		authorInfo = new PassableShortInfo("","");
-		parameterData = new ArrayList();
+		authorInfo = new PassableShortInfo("none","none");
+		data = new ArrayList();
 		time = new ServerDate("1970-01-01 00:00:00");
 		message = "No log message was input into this field.";
 		subjectType = "none";
@@ -48,10 +48,10 @@ public class PassableLog implements Passable{
 		else
 			throw new Exception("Error: Problem trying to get time data");
 
-		JSONArray dataArray = (JSONArray) safelyGet(parsedInput, "parameterData", new JSONArray());
-		parameterData = new ArrayList();
+		JSONArray dataArray = (JSONArray) safelyGet(parsedInput, "data", new JSONArray());
+		data = new ArrayList();
 		for(int i = 0; i < dataArray.length(); ++i){
-			parameterData.add(dataArray.get(i));
+			data.add(dataArray.get(i));
 		}
 	}
 
@@ -63,10 +63,10 @@ public class PassableLog implements Passable{
 		returnJSONObj.put("subject_type", subjectType.toLowerCase());
 		returnJSONObj.put("message", message);
 		JSONArray paramJSON = new JSONArray();
-		for(int i = 0; i < parameterData.size(); ++i){
-			paramJSON.put(parameterData.get(i));
+		for(int i = 0; i < data.size(); ++i){
+			paramJSON.put(data.get(i));
 		}
-		returnJSONObj.put("parameterData", paramJSON);
+		returnJSONObj.put("data", paramJSON);
 		return returnJSONObj;
 	}
 
@@ -84,12 +84,12 @@ public class PassableLog implements Passable{
 		PassableLog logEntry = new PassableLog();
 		logEntry.subjectType = "module";
 		logEntry.message = "I am the first log entry";
-		logEntry.parameterData.add("param 1");
+		logEntry.data.add("param 1");
 		try{
 			System.out.println(logEntry.toJSON());
 			PassableLog logEntry2 = new PassableLog(logEntry.toJSON());
 			logEntry2.authorInfo = new PassableShortInfo("4mdmin","user");
-			logEntry2.parameterData.add("param 2");
+			logEntry2.data.add("param 2");
 			logEntry2.message = "I am the second log entry";
 			logEntry2.time = new ServerDate();
 			System.out.println(logEntry2.toJSON());
