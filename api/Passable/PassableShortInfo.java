@@ -11,7 +11,7 @@ class PassableShortInfo implements Passable{
 		id = "";
 	}
 
-	public PassableShortInfo(String inType, String inID){
+	public PassableShortInfo(String inID, String inType){
 		type = inType;
 		id = inID;
 	}
