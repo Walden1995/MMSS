@@ -4,3 +4,6 @@
 [submodule "MMSS-Server"]
 	path = MMSS-Server
 	url = https://github.com/BluuArc/MMSS-Server.git
+[submodule "MMSS-Web_Client"]
+	path = MMSS-Web_Client
+	url = https://github.com/BluuArc/MMSS-Web_Client
