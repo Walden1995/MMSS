@@ -7,3 +7,6 @@
 [submodule "MMSS-Web_Client"]
 	path = MMSS-Web_Client
 	url = https://github.com/BluuArc/MMSS-Web_Client
+[submodule "MMSS-Module"]
+	path = MMSS-Module
+	url = https://github.com/aRandomDecoy/MMSS-Module
